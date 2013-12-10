@@ -19,6 +19,8 @@
 
 #include <linux/types.h>
 #include <asm/byteorder.h>
+#include <linux/in.h>
+#include <linux/in6.h>
 
 struct tcphdr {
 	__u16	source;
@@ -157,6 +159,23 @@ struct tcp_info
 	__u32	tcpi_rcv_space;
 
 	__u32	tcpi_total_retrans;
+};
+
+/* TCP_MULTIPATH_SUBFLOWS data */
+struct mptcp_subflow {
+	unsigned short family; // AF_INET or AF_INET6
+	__be16 dport;
+	__be16 sport;
+	union {
+		struct {
+			struct in_addr daddr;
+			struct in_addr saddr;
+		};
+		struct {
+			struct in6_addr daddr6;
+			struct in6_addr saddr6;
+		};
+	};
 };
 
 #ifdef __KERNEL__
